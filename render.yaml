@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: financas-casal-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: VAPID_PUBLIC_KEY
+        sync: false
+      - key: VAPID_PRIVATE_KEY
+        sync: false
+      - key: VAPID_SUBJECT
+        sync: false
+      - key: NOTIFICATION_CRON
+        value: "0 8 * * *"
+      - key: NOTIFICATION_TZ
+        value: America/Sao_Paulo
+      - key: CRON_SECRET
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-5
+      - key: NOCODB_BASE_URL
+        value: https://app.nocodb.com
+      - key: NOCODB_API_TOKEN
+        sync: false
+      - key: NOCODB_TABLE_ID
+        sync: false
