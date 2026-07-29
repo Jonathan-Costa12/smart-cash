@@ -7,7 +7,6 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import pushRoutes from './routes/pushRoutes.js';
 import ocrRoutes from './routes/ocrRoutes.js';
 import { startScheduler } from './scheduler.js';
-import * as lancamentosStore from './lancamentosStore.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,9 +16,6 @@ app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.json({ limit: '10mb' }));
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
-app.get('/api/meta', (_req, res) =>
-  res.json({ lancamentosStorage: lancamentosStore.usingNocoDB ? 'nocodb' : 'sqlite' })
-);
 app.use('/api/auth', authRoutes);
 app.use('/api/lancamentos', lancamentosRoutes);
 app.use('/api/dashboard', dashboardRoutes);

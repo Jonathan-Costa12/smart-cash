@@ -20,7 +20,7 @@ const hoje = new Date();
 const mes = hoje.toISOString().slice(0, 7);
 const data = (dia) => `${mes}-${String(dia).padStart(2, '0')}`;
 
-const existentes = await lancamentosStore.list({ mes });
+const existentes = lancamentosStore.list({ mes });
 
 if (existentes.length === 0) {
   const lancamentos = [
@@ -39,9 +39,9 @@ if (existentes.length === 0) {
   ];
 
   for (const l of lancamentos) {
-    await lancamentosStore.create({ ...l, origem: 'manual', usuario_email: users[0].email });
+    lancamentosStore.create({ ...l, origem: 'manual', usuario_email: users[0].email });
   }
-  console.log(`Seed: ${lancamentos.length} lançamentos criados para ${mes} (fonte: ${lancamentosStore.usingNocoDB ? 'NocoDB' : 'SQLite local'})`);
+  console.log(`Seed: ${lancamentos.length} lançamentos criados para ${mes}`);
 } else {
   console.log('Seed: já existem lançamentos para o mês atual, nada foi inserido.');
 }

@@ -29,9 +29,3 @@ services:
         sync: false
       - key: ANTHROPIC_MODEL
         value: claude-sonnet-5
-      - key: NOCODB_BASE_URL
-        value: https://app.nocodb.com
-      - key: NOCODB_API_TOKEN
-        sync: false
-      - key: NOCODB_TABLE_ID
-        sync: false
