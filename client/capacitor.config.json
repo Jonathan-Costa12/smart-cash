@@ -1,0 +1,9 @@
+{
+  "appId": "com.financascasal.app",
+  "appName": "Finanças Casal",
+  "webDir": "dist",
+  "backgroundColor": "#000000",
+  "android": {
+    "backgroundColor": "#000000"
+  }
+}
