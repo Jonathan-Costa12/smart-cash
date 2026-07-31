@@ -42,8 +42,8 @@ export default function NotificationToggle() {
         title={subscribed ? 'Notificações ativadas — clique para desativar' : 'Ativar notificações de contas vencendo hoje'}
         className={`px-3 py-2 rounded-lg text-sm font-medium transition ${
           subscribed
-            ? 'bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30'
-            : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+            ? 'bg-green-600/20 text-green-400 hover:bg-green-600/30'
+            : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
         }`}
       >
         {loading ? '...' : subscribed ? '🔔 Ativadas' : '🔕 Ativar avisos'}

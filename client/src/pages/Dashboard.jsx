@@ -25,7 +25,7 @@ export default function Dashboard() {
       .finally(() => setLoading(false));
   }, [token, mes]);
 
-  if (loading && !data) return <p className="text-slate-400">Carregando dashboard...</p>;
+  if (loading && !data) return <p className="text-zinc-400">Carregando dashboard...</p>;
   if (error) return <p className="text-red-400">{error}</p>;
   if (!data) return null;
 
@@ -33,7 +33,7 @@ export default function Dashboard() {
     Pago: 'text-emerald-400',
     'A vencer': 'text-amber-400',
     Atrasado: 'text-red-400',
-    'Sem valor': 'text-slate-400',
+    'Sem valor': 'text-zinc-400',
   };
 
   return (
@@ -44,7 +44,7 @@ export default function Dashboard() {
           type="month"
           value={mes}
           onChange={(e) => setMes(e.target.value)}
-          className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-1.5 text-white text-sm"
+          className="rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-white text-sm"
         />
       </div>
 
@@ -69,36 +69,36 @@ export default function Dashboard() {
           value={currency(data.saldo)}
           tone={data.saldo >= 0 ? 'text-emerald-400' : 'text-red-400'}
         />
-        <Card label="Despesas pagas" value={`${data.percentualPago}%`} tone="text-indigo-400" />
+        <Card label="Despesas pagas" value={`${data.percentualPago}%`} tone="text-green-400" />
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-          <h3 className="text-slate-300 text-sm mb-1">Quanto ainda é seguro gastar</h3>
+        <div className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5">
+          <h3 className="text-zinc-300 text-sm mb-1">Quanto ainda é seguro gastar</h3>
           <p className="text-2xl font-bold text-white">{currency(data.quantoSeguroGastar)}</p>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-zinc-500 mt-1">
             Já gasto {data.percentualGastoDaReceita}% da receita esperada do mês
           </p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-          <h3 className="text-slate-300 text-sm mb-3">Despesas por categoria</h3>
+        <div className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5">
+          <h3 className="text-zinc-300 text-sm mb-3">Despesas por categoria</h3>
           <CategoriaBar label="Fixa" valor={data.porCategoria.Fixa.despesas} total={data.totalDespesas} />
           <CategoriaBar label="Variável" valor={data.porCategoria.Variavel.despesas} total={data.totalDespesas} />
         </div>
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-        <h3 className="text-slate-300 text-sm mb-3">Pendências (a vencer / atrasadas)</h3>
+      <div className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5">
+        <h3 className="text-zinc-300 text-sm mb-3">Pendências (a vencer / atrasadas)</h3>
         {data.pendencias.length === 0 ? (
-          <p className="text-slate-500 text-sm">Nenhuma pendência 🎉</p>
+          <p className="text-zinc-500 text-sm">Nenhuma pendência 🎉</p>
         ) : (
-          <ul className="divide-y divide-slate-800">
+          <ul className="divide-y divide-zinc-800">
             {data.pendencias.map((p) => (
               <li key={p.id} className="py-2 flex items-center justify-between text-sm">
                 <div>
                   <p className="text-white">{p.fonte_descricao}</p>
-                  <p className="text-slate-500">Vencimento: {p.vencimento}</p>
+                  <p className="text-zinc-500">Vencimento: {p.vencimento}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-white">{currency(p.valor)}</p>
@@ -123,8 +123,8 @@ function Alert({ children }) {
 
 function Card({ label, value, tone }) {
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-      <p className="text-xs text-slate-400">{label}</p>
+    <div className="bg-zinc-900 border border-green-900/40 rounded-2xl p-4">
+      <p className="text-xs text-zinc-400">{label}</p>
       <p className={`text-lg font-bold ${tone}`}>{value}</p>
     </div>
   );
@@ -134,12 +134,12 @@ function CategoriaBar({ label, valor, total }) {
   const pct = total > 0 ? Math.round((valor / total) * 100) : 0;
   return (
     <div className="mb-3 last:mb-0">
-      <div className="flex justify-between text-xs text-slate-400 mb-1">
+      <div className="flex justify-between text-xs text-zinc-400 mb-1">
         <span>{label}</span>
         <span>{currency(valor)} ({pct}%)</span>
       </div>
-      <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
-        <div className="h-full bg-indigo-500" style={{ width: `${pct}%` }} />
+      <div className="h-2 rounded-full bg-zinc-800 overflow-hidden">
+        <div className="h-full bg-green-500" style={{ width: `${pct}%` }} />
       </div>
     </div>
   );

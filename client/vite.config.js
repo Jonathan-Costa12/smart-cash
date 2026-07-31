@@ -22,8 +22,8 @@ export default defineConfig({
         name: 'Finanças Casal',
         short_name: 'Finanças',
         description: 'Controle financeiro compartilhado do casal',
-        theme_color: '#0f172a',
-        background_color: '#0f172a',
+        theme_color: '#16a34a',
+        background_color: '#000000',
         display: 'standalone',
         start_url: '/',
         icons: [

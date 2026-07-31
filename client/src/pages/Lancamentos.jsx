@@ -102,7 +102,7 @@ export default function Lancamentos() {
     Pago: 'text-emerald-400',
     'A vencer': 'text-amber-400',
     Atrasado: 'text-red-400',
-    'Sem valor': 'text-slate-400',
+    'Sem valor': 'text-zinc-400',
   };
 
   return (
@@ -113,12 +113,12 @@ export default function Lancamentos() {
           type="month"
           value={mes}
           onChange={(e) => setMes(e.target.value)}
-          className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-1.5 text-white text-sm"
+          className="rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-white text-sm"
         />
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-        <h3 className="text-slate-300 text-sm font-medium">
+      <form onSubmit={handleSubmit} className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5 space-y-4">
+        <h3 className="text-zinc-300 text-sm font-medium">
           {editingId ? 'Editar lançamento' : 'Novo lançamento manual'}
         </h3>
 
@@ -180,7 +180,7 @@ export default function Lancamentos() {
           <button
             type="submit"
             disabled={saving}
-            className="rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white font-medium px-4 py-2 text-sm transition"
+            className="rounded-lg bg-green-600 hover:bg-green-500 disabled:opacity-60 text-black font-medium px-4 py-2 text-sm transition"
           >
             {saving ? 'Salvando...' : editingId ? 'Salvar alterações' : 'Adicionar lançamento'}
           </button>
@@ -188,7 +188,7 @@ export default function Lancamentos() {
             <button
               type="button"
               onClick={cancelEdit}
-              className="rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-4 py-2 text-sm transition"
+              className="rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium px-4 py-2 text-sm transition"
             >
               Cancelar
             </button>
@@ -196,18 +196,18 @@ export default function Lancamentos() {
         </div>
       </form>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+      <div className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5">
         {loading ? (
-          <p className="text-slate-400 text-sm">Carregando...</p>
+          <p className="text-zinc-400 text-sm">Carregando...</p>
         ) : error ? (
           <p className="text-red-400 text-sm">{error}</p>
         ) : items.length === 0 ? (
-          <p className="text-slate-500 text-sm">Nenhum lançamento neste mês.</p>
+          <p className="text-zinc-500 text-sm">Nenhum lançamento neste mês.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-slate-400 border-b border-slate-800">
+                <tr className="text-left text-zinc-400 border-b border-zinc-800">
                   <th className="py-2 pr-3">Descrição</th>
                   <th className="py-2 pr-3">Tipo</th>
                   <th className="py-2 pr-3">Categoria</th>
@@ -217,17 +217,17 @@ export default function Lancamentos() {
                   <th className="py-2 pr-3"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800">
+              <tbody className="divide-y divide-zinc-800">
                 {items.map((item) => (
                   <tr key={item.id}>
                     <td className="py-2 pr-3 text-white">{item.fonte_descricao}</td>
-                    <td className="py-2 pr-3 text-slate-300">{item.tipo}</td>
-                    <td className="py-2 pr-3 text-slate-300">{item.categoria === 'Variavel' ? 'Variável' : 'Fixa'}</td>
+                    <td className="py-2 pr-3 text-zinc-300">{item.tipo}</td>
+                    <td className="py-2 pr-3 text-zinc-300">{item.categoria === 'Variavel' ? 'Variável' : 'Fixa'}</td>
                     <td className="py-2 pr-3 text-white">{currency(item.valor)}</td>
-                    <td className="py-2 pr-3 text-slate-300">{item.vencimento}</td>
+                    <td className="py-2 pr-3 text-zinc-300">{item.vencimento}</td>
                     <td className={`py-2 pr-3 ${statusColor[item.status]}`}>{item.status}</td>
                     <td className="py-2 pr-3 whitespace-nowrap">
-                      <button onClick={() => startEdit(item)} className="text-indigo-400 hover:underline mr-3">
+                      <button onClick={() => startEdit(item)} className="text-green-400 hover:underline mr-3">
                         Editar
                       </button>
                       <button onClick={() => handleDelete(item.id)} className="text-red-400 hover:underline">
@@ -248,7 +248,7 @@ export default function Lancamentos() {
 function Field({ label, children }) {
   return (
     <label className="block">
-      <span className="block text-xs text-slate-400 mb-1">{label}</span>
+      <span className="block text-xs text-zinc-400 mb-1">{label}</span>
       {children}
     </label>
   );

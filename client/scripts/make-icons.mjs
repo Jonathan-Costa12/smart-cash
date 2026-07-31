@@ -26,7 +26,8 @@ function chunk(type, data) {
   return Buffer.concat([len, typeBuf, data, crcBuf]);
 }
 
-function makePng(size, [r, g, b]) {
+// Fundo preto com um círculo verde centralizado (visual simples de "moeda")
+function makePng(size, bg, fg) {
   const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(size, 0);
@@ -37,12 +38,19 @@ function makePng(size, [r, g, b]) {
   ihdr[11] = 0;
   ihdr[12] = 0;
 
+  const center = size / 2;
+  const radius = size * 0.38;
+
   const rowLen = size * 3 + 1;
   const raw = Buffer.alloc(rowLen * size);
   for (let y = 0; y < size; y++) {
     const rowStart = y * rowLen;
     raw[rowStart] = 0; // filter none
     for (let x = 0; x < size; x++) {
+      const dx = x + 0.5 - center;
+      const dy = y + 0.5 - center;
+      const inCircle = dx * dx + dy * dy <= radius * radius;
+      const [r, g, b] = inCircle ? fg : bg;
       const px = rowStart + 1 + x * 3;
       raw[px] = r;
       raw[px + 1] = g;
@@ -59,8 +67,8 @@ function makePng(size, [r, g, b]) {
   ]);
 }
 
-// Azul escuro (theme_color) como placeholder do ícone
-const color = [15, 23, 42];
-writeFileSync(new URL('../public/icons/icon-192.png', import.meta.url), makePng(192, color));
-writeFileSync(new URL('../public/icons/icon-512.png', import.meta.url), makePng(512, color));
-console.log('Ícones gerados em public/icons/');
+const black = [0, 0, 0];
+const green = [22, 163, 74]; // Tailwind green-600
+writeFileSync(new URL('../public/icons/icon-192.png', import.meta.url), makePng(192, black, green));
+writeFileSync(new URL('../public/icons/icon-512.png', import.meta.url), makePng(512, black, green));
+console.log('Ícones gerados em public/icons/ (preto com círculo verde)');

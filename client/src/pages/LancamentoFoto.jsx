@@ -101,27 +101,27 @@ export default function LancamentoFoto() {
     <div className="space-y-6 max-w-lg">
       <h2 className="text-xl font-semibold text-white">Lançamento por foto</h2>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+      <div className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5 space-y-4">
         <label className="block">
-          <span className="block text-xs text-slate-400 mb-2">Foto do comprovante/boleto</span>
+          <span className="block text-xs text-zinc-400 mb-2">Foto do comprovante/boleto</span>
           <input
             type="file"
             accept="image/*"
             capture="environment"
             onChange={handleFileChange}
-            className="block w-full text-sm text-slate-300 file:mr-4 file:rounded-lg file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-indigo-500"
+            className="block w-full text-sm text-zinc-300 file:mr-4 file:rounded-lg file:border-0 file:bg-green-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-black hover:file:bg-green-500"
           />
         </label>
 
         {previewUrl && (
-          <img src={previewUrl} alt="Pré-visualização do comprovante" className="max-h-64 rounded-lg border border-slate-800 mx-auto" />
+          <img src={previewUrl} alt="Pré-visualização do comprovante" className="max-h-64 rounded-lg border border-zinc-800 mx-auto" />
         )}
 
         {file && !showForm && (
           <button
             onClick={handleExtrair}
             disabled={extraindo}
-            className="w-full rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 text-white font-medium py-2 text-sm transition"
+            className="w-full rounded-lg bg-green-600 hover:bg-green-500 disabled:opacity-60 text-black font-medium py-2 text-sm transition"
           >
             {extraindo ? 'Lendo comprovante...' : '🔎 Extrair dados da foto'}
           </button>
@@ -140,9 +140,9 @@ export default function LancamentoFoto() {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSalvar} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+        <form onSubmit={handleSalvar} className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-slate-300 text-sm font-medium">Confirme os dados extraídos</h3>
+            <h3 className="text-zinc-300 text-sm font-medium">Confirme os dados extraídos</h3>
             {confianca && (
               <span
                 className={`text-xs px-2 py-1 rounded-full ${
@@ -157,20 +157,20 @@ export default function LancamentoFoto() {
               </span>
             )}
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-zinc-500">
             Revise os campos antes de salvar — a extração é automática e pode errar.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <label className="block">
-              <span className="block text-xs text-slate-400 mb-1">Tipo</span>
+              <span className="block text-xs text-zinc-400 mb-1">Tipo</span>
               <select value={form.tipo} onChange={(e) => setForm({ ...form, tipo: e.target.value })} className="input">
                 <option value="Receita">Receita</option>
                 <option value="Despesa">Despesa</option>
               </select>
             </label>
             <label className="block">
-              <span className="block text-xs text-slate-400 mb-1">Categoria</span>
+              <span className="block text-xs text-zinc-400 mb-1">Categoria</span>
               <select
                 value={form.categoria}
                 onChange={(e) => setForm({ ...form, categoria: e.target.value })}
@@ -183,7 +183,7 @@ export default function LancamentoFoto() {
           </div>
 
           <label className="block">
-            <span className="block text-xs text-slate-400 mb-1">Descrição (fonte)</span>
+            <span className="block text-xs text-zinc-400 mb-1">Descrição (fonte)</span>
             <input
               value={form.fonte_descricao}
               onChange={(e) => setForm({ ...form, fonte_descricao: e.target.value })}
@@ -193,7 +193,7 @@ export default function LancamentoFoto() {
 
           <div className="grid sm:grid-cols-3 gap-4">
             <label className="block">
-              <span className="block text-xs text-slate-400 mb-1">Valor (R$)</span>
+              <span className="block text-xs text-zinc-400 mb-1">Valor (R$)</span>
               <input
                 type="number"
                 step="0.01"
@@ -204,7 +204,7 @@ export default function LancamentoFoto() {
               />
             </label>
             <label className="block">
-              <span className="block text-xs text-slate-400 mb-1">Vencimento</span>
+              <span className="block text-xs text-zinc-400 mb-1">Vencimento</span>
               <input
                 type="date"
                 value={form.vencimento}
@@ -213,7 +213,7 @@ export default function LancamentoFoto() {
               />
             </label>
             <label className="block">
-              <span className="block text-xs text-slate-400 mb-1">Pagamento (se já pago)</span>
+              <span className="block text-xs text-zinc-400 mb-1">Pagamento (se já pago)</span>
               <input
                 type="date"
                 value={form.pagamento}
@@ -228,7 +228,7 @@ export default function LancamentoFoto() {
           <button
             type="submit"
             disabled={saving}
-            className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-60 text-white font-medium py-2 text-sm transition"
+            className="w-full rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-60 text-black font-medium py-2 text-sm transition"
           >
             {saving ? 'Salvando...' : '✅ Confirmar e salvar lançamento'}
           </button>
