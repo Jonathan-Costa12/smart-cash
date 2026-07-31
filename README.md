@@ -142,17 +142,18 @@ O frontend web é empacotado como app Android de verdade usando [Capacitor](http
 
 ### Gerar um APK de teste
 
-Precisa de **Java 17 (JDK)** e do **Android SDK** instalados (o mais simples é instalar o Android Studio, que já traz os dois — [developer.android.com/studio](https://developer.android.com/studio)).
+Java 17 (JDK) e o Android SDK já estão instalados nesta máquina. O projeto já está sincronizado (`npm run build` + `npx cap sync android` já rodados).
 
-```bash
-cd client
-npm run build          # gera o build web em dist/
-npx cap sync android    # copia o build pro projeto Android
-cd android
-./gradlew assembleDebug # gera o APK (Windows: gradlew.bat assembleDebug)
-```
+**Use o Android Studio pela interface gráfica** (não o terminal) para gerar o APK — em builds automatizados por script, o antivírus corporativo (McAfee) desta máquina bloqueia a comunicação interna do Gradle com o erro `Unable to establish loopback connection`, mesmo sendo tráfego 100% local. Abrindo o Android Studio normalmente esse bloqueio não costuma acontecer:
+
+1. Abra o **Android Studio**
+2. **Open** → selecione a pasta `client/android`
+3. Espere sincronizar (primeira vez demora)
+4. **Build → Build Bundle(s) / APK(s) → Build APK(s)**
 
 O APK fica em `client/android/app/build/outputs/apk/debug/app-debug.apk`. Copie esse arquivo pro celular Android (ou use `adb install app-debug.apk` com o aparelho conectado) e instale — pode ser preciso permitir "instalar de fontes desconhecidas" nas configurações do Android, já que não veio da Play Store.
+
+Se preferir tentar pelo terminal mesmo assim (`cd client/android && ./gradlew.bat assembleDebug`) e esbarrar no mesmo erro de loopback, provavelmente é a mesma proteção agindo — nesse caso a interface gráfica do Android Studio é o caminho mais confiável.
 
 ### Sempre que mudar algo no app web
 
