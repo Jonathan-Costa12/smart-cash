@@ -6,6 +6,7 @@ App de controle financeiro compartilhado entre duas pessoas. MVP (login, dashboa
 
 - `server/` — API REST (Node/Express), autenticação JWT, notificações push, banco SQLite local (embutido, sem serviço externo)
 - `client/` — Frontend (React + Vite + Tailwind), PWA instalável, service worker com push
+- `client/android/` — projeto Android nativo (Capacitor), empacota o mesmo frontend web para gerar APK/publicar na Play Store
 
 ## Como rodar (desenvolvimento)
 
@@ -134,6 +135,36 @@ Isso é aceitável para começar a usar e testar, mas **não é adequado para de
 5. O ícone do app aparece na tela inicial, abre em tela cheia (sem barra de navegador) e recebe notificações normalmente.
 
 Repita esse passo no celular de cada um de vocês dois.
+
+## App nativo Android (Capacitor)
+
+O frontend web é empacotado como app Android de verdade usando [Capacitor](https://capacitorjs.com), em `client/android/`. Ícone e splash screen já seguem a identidade verde/preto.
+
+### Gerar um APK de teste
+
+Precisa de **Java 17 (JDK)** e do **Android SDK** instalados (o mais simples é instalar o Android Studio, que já traz os dois — [developer.android.com/studio](https://developer.android.com/studio)).
+
+```bash
+cd client
+npm run build          # gera o build web em dist/
+npx cap sync android    # copia o build pro projeto Android
+cd android
+./gradlew assembleDebug # gera o APK (Windows: gradlew.bat assembleDebug)
+```
+
+O APK fica em `client/android/app/build/outputs/apk/debug/app-debug.apk`. Copie esse arquivo pro celular Android (ou use `adb install app-debug.apk` com o aparelho conectado) e instale — pode ser preciso permitir "instalar de fontes desconhecidas" nas configurações do Android, já que não veio da Play Store.
+
+### Sempre que mudar algo no app web
+
+Depois de editar o frontend, repita `npm run build && npx cap sync android` antes de gerar um novo APK — o Capacitor não observa mudanças automaticamente.
+
+### Publicar na Google Play (opcional, futuro)
+
+Exige uma conta de desenvolvedor Google Play (US$25, pagamento único, só você pode criar) e gerar um build assinado (`./gradlew bundleRelease`) em vez do debug. Podemos fazer isso quando quiser publicar de verdade — o debug já serve pra instalar e usar no dia a dia sem passar pela loja.
+
+### iOS
+
+Build nativo para iPhone exige Xcode, que só roda em macOS — não é possível compilar isso nesta máquina Windows. O caminho recomendado agora é o **PWA já configurado**: abrir a URL do app no Safari do iPhone e "Adicionar à Tela de Início" (seção de instalação no celular, mais abaixo) — funciona sem custo, sem Mac e sem conta de desenvolvedor, com ícone próprio, tela cheia e notificações. Se um dia quiser o app "de verdade" na App Store, aí sim entra a conversa de conta Apple Developer (US$99/ano) + Mac ou serviço de build na nuvem.
 
 ## Próximos passos (Fase 2 restante)
 
