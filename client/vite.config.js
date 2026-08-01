@@ -19,8 +19,8 @@ export default defineConfig({
       },
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png'],
       manifest: {
-        name: 'Finanças Casal',
-        short_name: 'Finanças',
+        name: 'Smart Cash',
+        short_name: 'Smart Cash',
         description: 'Controle financeiro compartilhado do casal',
         theme_color: '#16a34a',
         background_color: '#000000',

@@ -1,6 +1,8 @@
-# Finanças Casal
+# Smart Cash
 
 App de controle financeiro compartilhado entre duas pessoas. MVP (login, dashboard, lançamento manual, notificações push) e lançamento por foto com OCR já implementados.
+
+> O código-fonte e o repositório continuam com o nome `financas-casal` (pasta local e repositório no GitHub) — só o nome exibido para os usuários mudou para "Smart Cash". Avise se quiser renomear a pasta/repositório também.
 
 ## Estrutura
 

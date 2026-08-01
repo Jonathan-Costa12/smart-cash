@@ -7,7 +7,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  let data = { title: 'Finanças Casal', body: 'Você tem uma nova notificação.', url: '/' };
+  let data = { title: 'Smart Cash', body: 'Você tem uma nova notificação.', url: '/' };
   try {
     if (event.data) data = { ...data, ...event.data.json() };
   } catch {

@@ -27,7 +27,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-black">
       <form onSubmit={handleSubmit} className="w-full max-w-sm bg-zinc-900 border border-green-900/40 rounded-2xl p-6 shadow-xl">
-        <h1 className="text-2xl font-bold text-green-500 mb-1">💰 Finanças Casal</h1>
+        <h1 className="text-2xl font-bold text-green-500 mb-1">💰 Smart Cash</h1>
         <p className="text-zinc-400 text-sm mb-6">Entre com sua conta</p>
 
         <label className="block text-sm text-zinc-300 mb-1">E-mail</label>
