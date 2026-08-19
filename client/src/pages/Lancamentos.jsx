@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../api.js';
 
@@ -19,14 +20,26 @@ const emptyForm = {
 
 export default function Lancamentos() {
   const { token } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [mes, setMes] = useState(mesAtual());
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState(() => {
+    const tipoInicial = searchParams.get('tipo');
+    return tipoInicial === 'Receita' ? { ...emptyForm, tipo: 'Receita', categoria: 'Fixa' } : emptyForm;
+  });
   const [editingId, setEditingId] = useState(null);
   const [formError, setFormError] = useState('');
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('tipo')) {
+      document.getElementById('form-lancamento')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setSearchParams({}, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function load() {
     setLoading(true);
@@ -117,7 +130,7 @@ export default function Lancamentos() {
         />
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5 space-y-4">
+      <form id="form-lancamento" onSubmit={handleSubmit} className="bg-zinc-900 border border-green-900/40 rounded-2xl p-5 space-y-4">
         <h3 className="text-zinc-300 text-sm font-medium">
           {editingId ? 'Editar lançamento' : 'Novo lançamento manual'}
         </h3>

@@ -1,10 +1,13 @@
 import db from './db.js';
 
-export function list({ mes } = {}) {
+export function list({ mes, all } = {}) {
   if (mes) {
     return db
       .prepare(`SELECT * FROM lancamentos WHERE substr(vencimento, 1, 7) = ? ORDER BY vencimento ASC`)
       .all(mes);
+  }
+  if (all) {
+    return db.prepare(`SELECT * FROM lancamentos ORDER BY vencimento ASC`).all();
   }
   return db.prepare(`SELECT * FROM lancamentos ORDER BY vencimento DESC LIMIT 200`).all();
 }

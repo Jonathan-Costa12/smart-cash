@@ -6,15 +6,15 @@ import * as lancamentosStore from '../lancamentosStore.js';
 const router = Router();
 router.use(requireAuth);
 
-// GET /api/dashboard?mes=2026-07&limitePercentual=70&diaLimite=20
-router.get('/', async (req, res, next) => {
- try {
-  const mes = req.query.mes || new Date().toISOString().slice(0, 7);
-  const limitePercentual = Number(req.query.limitePercentual) || 70;
-  const diaLimite = Number(req.query.diaLimite) || 20;
+function sum(arr) {
+  return arr.reduce((acc, v) => acc + v, 0);
+}
 
-  const rows = (await lancamentosStore.list({ mes })).map(withStatus);
+function round2(n) {
+  return Math.round(n * 100) / 100;
+}
 
+function agregar(rows, { limitePercentual, diaLimite, mes }) {
   const receitas = rows.filter((r) => r.tipo === 'Receita');
   const despesas = rows.filter((r) => r.tipo === 'Despesa');
 
@@ -30,8 +30,8 @@ router.get('/', async (req, res, next) => {
   const percentualGastoDaReceita = receitaEsperada > 0 ? (totalDespesasPagas / receitaEsperada) * 100 : 0;
 
   const hoje = new Date();
-  const isMesAtual = hoje.toISOString().slice(0, 7) === mes;
-  const diaAtual = isMesAtual ? hoje.getDate() : diaLimite + 1; // se for mês passado/futuro, não dispara alerta de "antes do dia"
+  const isMesAtual = mes ? hoje.toISOString().slice(0, 7) === mes : false;
+  const diaAtual = isMesAtual ? hoje.getDate() : diaLimite + 1;
 
   const alertaGastoAcelerado =
     isMesAtual && diaAtual <= diaLimite && percentualGastoDaReceita > limitePercentual;
@@ -55,8 +55,7 @@ router.get('/', async (req, res, next) => {
 
   const quantoSeguroGastar = Math.max(receitaEsperada * (limitePercentual / 100) - totalDespesasPagas, 0);
 
-  res.json({
-    mes,
+  return {
     totalReceitas,
     totalDespesas,
     saldo,
@@ -75,18 +74,77 @@ router.get('/', async (req, res, next) => {
         : null,
       despesasFixasAtrasadas: despesasFixasAtrasadas.map(withStatus),
     },
-  });
- } catch (err) {
-  next(err);
- }
+  };
+}
+
+// GET /api/dashboard?mes=2026-07&visao=mensal|geral&limitePercentual=70&diaLimite=20
+router.get('/', async (req, res, next) => {
+  try {
+    const mes = req.query.mes || new Date().toISOString().slice(0, 7);
+    const visao = req.query.visao === 'geral' ? 'geral' : 'mensal';
+    const limitePercentual = Number(req.query.limitePercentual) || 70;
+    const diaLimite = Number(req.query.diaLimite) || 20;
+
+    const rows =
+      visao === 'geral'
+        ? (await lancamentosStore.list({ all: true })).map(withStatus)
+        : (await lancamentosStore.list({ mes })).map(withStatus);
+
+    const resultado = agregar(rows, { limitePercentual, diaLimite, mes: visao === 'mensal' ? mes : null });
+
+    // Patrimônio líquido: acumulado histórico (tudo que já foi efetivamente pago), independe da visão selecionada.
+    const todasAsLinhas = visao === 'geral' ? rows : (await lancamentosStore.list({ all: true })).map(withStatus);
+    const pagas = todasAsLinhas.filter((l) => l.status === 'Pago');
+    const patrimonioLiquido = round2(
+      sum(pagas.filter((l) => l.tipo === 'Receita').map((l) => l.valor)) -
+        sum(pagas.filter((l) => l.tipo === 'Despesa').map((l) => l.valor))
+    );
+
+    res.json({ mes, visao, patrimonioLiquido, ...resultado });
+  } catch (err) {
+    next(err);
+  }
 });
 
-function sum(arr) {
-  return arr.reduce((acc, v) => acc + v, 0);
-}
+// GET /api/dashboard/evolucao?meses=6
+router.get('/evolucao', async (req, res, next) => {
+  try {
+    const meses = Math.min(Math.max(Number(req.query.meses) || 6, 2), 24);
+    const rows = await lancamentosStore.list({ all: true });
 
-function round2(n) {
-  return Math.round(n * 100) / 100;
-}
+    const hoje = new Date();
+    const chave = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+    const referencias = [];
+    for (let i = meses - 1; i >= 0; i--) {
+      const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+      referencias.push(chave(d));
+    }
+
+    const porMes = new Map(referencias.map((m) => [m, { mes: m, receitas: 0, despesas: 0 }]));
+
+    for (const row of rows) {
+      const m = row.vencimento?.slice(0, 7);
+      if (!porMes.has(m)) continue;
+      const bucket = porMes.get(m);
+      if (row.tipo === 'Receita') bucket.receitas += row.valor;
+      else bucket.despesas += row.valor;
+    }
+
+    const serie = referencias.map((m) => {
+      const b = porMes.get(m);
+      return {
+        mes: b.mes,
+        receitas: round2(b.receitas),
+        despesas: round2(b.despesas),
+        saldo: round2(b.receitas - b.despesas),
+      };
+    });
+
+    res.json({ serie });
+  } catch (err) {
+    next(err);
+  }
+});
 
 export default router;

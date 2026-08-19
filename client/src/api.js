@@ -23,6 +23,7 @@ export const api = {
   login: (email, senha) => request('/auth/login', { method: 'POST', body: { email, senha } }),
   me: (token) => request('/auth/me', { token }),
   dashboard: (token, params) => request(`/dashboard?${new URLSearchParams(params)}`, { token }),
+  evolucao: (token, params) => request(`/dashboard/evolucao?${new URLSearchParams(params)}`, { token }),
   listLancamentos: (token, params) => request(`/lancamentos?${new URLSearchParams(params)}`, { token }),
   createLancamento: (token, body) => request('/lancamentos', { method: 'POST', body, token }),
   updateLancamento: (token, id, body) => request(`/lancamentos/${id}`, { method: 'PUT', body, token }),
