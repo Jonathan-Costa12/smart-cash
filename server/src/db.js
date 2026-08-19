@@ -15,6 +15,7 @@ db.exec(`
     email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     nome TEXT NOT NULL,
+    is_master INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
@@ -51,5 +52,11 @@ db.exec(`
     UNIQUE (lancamento_id, data_referencia)
   );
 `);
+
+// Migração leve: adiciona is_master em bancos criados antes dessa coluna existir.
+const colunasUsers = db.prepare('PRAGMA table_info(users)').all();
+if (!colunasUsers.some((c) => c.name === 'is_master')) {
+  db.exec('ALTER TABLE users ADD COLUMN is_master INTEGER NOT NULL DEFAULT 0');
+}
 
 export default db;

@@ -34,4 +34,6 @@ export const api = {
   pushTestCheck: (token) => request('/push/test-check', { method: 'POST', token }),
   ocrStatus: (token) => request('/ocr/status', { token }),
   ocrExtrair: (token, body) => request('/ocr/extrair', { method: 'POST', body, token }),
+  listUsuarios: (token) => request('/auth/usuarios', { token }),
+  criarUsuario: (token, body) => request('/auth/usuarios', { method: 'POST', body, token }),
 };

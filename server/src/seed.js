@@ -8,13 +8,13 @@ const users = [
 ];
 
 const insertUser = db.prepare(
-  'INSERT OR IGNORE INTO users (email, password_hash, nome) VALUES (?, ?, ?)'
+  'INSERT OR IGNORE INTO users (email, password_hash, nome, is_master) VALUES (?, ?, ?, ?)'
 );
 
-for (const u of users) {
+users.forEach((u, i) => {
   const hash = bcrypt.hashSync(u.senha, 10);
-  insertUser.run(u.email.toLowerCase(), hash, u.nome);
-}
+  insertUser.run(u.email.toLowerCase(), hash, u.nome, i === 0 ? 1 : 0);
+});
 
 const hoje = new Date();
 const mes = hoje.toISOString().slice(0, 7);

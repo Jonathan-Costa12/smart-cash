@@ -4,9 +4,11 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-nao-usar-em-producao';
 const TOKEN_TTL = '30d';
 
 export function signToken(user) {
-  return jwt.sign({ sub: user.id, email: user.email, nome: user.nome }, JWT_SECRET, {
-    expiresIn: TOKEN_TTL,
-  });
+  return jwt.sign(
+    { sub: user.id, email: user.email, nome: user.nome, isMaster: Boolean(user.is_master) },
+    JWT_SECRET,
+    { expiresIn: TOKEN_TTL }
+  );
 }
 
 export function requireAuth(req, res, next) {
@@ -15,9 +17,21 @@ export function requireAuth(req, res, next) {
   if (!token) return res.status(401).json({ error: 'Não autenticado' });
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    req.user = { id: payload.sub, email: payload.email, nome: payload.nome };
+    req.user = {
+      id: payload.sub,
+      email: payload.email,
+      nome: payload.nome,
+      isMaster: Boolean(payload.isMaster),
+    };
     next();
   } catch {
     return res.status(401).json({ error: 'Token inválido ou expirado' });
   }
+}
+
+export function requireMaster(req, res, next) {
+  if (!req.user?.isMaster) {
+    return res.status(403).json({ error: 'Apenas o usuário master pode fazer isso' });
+  }
+  next();
 }
